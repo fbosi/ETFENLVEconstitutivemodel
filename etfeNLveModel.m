@@ -21,23 +21,24 @@ formulation = "strain"; %choose between "stress" to obtain stresses,
 %%%%%%%%%%%% loading the model constants %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if model == "ORTHO"
-    opt1 = readmatrix(strcat(path,'\D11_Opt_1e5Mpa.csv'));
-    opt2 = readmatrix(strcat(path,'\D22_Opt_1e5Mpa.csv'));
-    opt6 = readmatrix(strcat(path,'\D66_Opt_1e5Mpa.csv'));
-    ea11 = readmatrix(strcat(path,'\EA11_1e5Mpa.csv'));    
-    ea22 = readmatrix(strcat(path,'\EA22_1e5Mpa.csv'));
-    ea66 = readmatrix(strcat(path,'\EA66_1e5Mpa.csv'));
+    opt1 = readmatrix(strcat(path,'\materialVariables\D11_Opt_1e5Mpa.csv'));
+    opt2 = readmatrix(strcat(path,'\materialVariables\D22_Opt_1e5Mpa.csv'));
+    opt6 = readmatrix(strcat(path,'\materialVariables\D66_Opt_1e5Mpa.csv'));
+    ea11 = readmatrix(strcat(path,'\materialVariables\EA11_1e5Mpa.csv'));    
+    ea22 = readmatrix(strcat(path,'\materialVariables\EA22_1e5Mpa.csv'));
+    ea66 = readmatrix(strcat(path,'\materialVariables\EA66_1e5Mpa.csv'));
     activationvolume = 2.74;
 else
-    opt1 = readmatrix(strcat(path,'\ISO.csv'));
-    opt2 = readmatrix(strcat(path,'\ISO.csv'));
-    opt6 = readmatrix(strcat(path,'\ISO.csv'));
-    ea11 = readmatrix(strcat(path,'\EAISO.csv'));    
-    ea22 = readmatrix(strcat(path,'\EAISO.csv'));
-    ea66 = readmatrix(strcat(path,'\EAISO.csv'));
-    activationvolume = readmatrix(strcat(path,'\240304_EyringISO2.csv'));
+    opt1 = readmatrix(strcat(path,'\materialVariables\ISO.csv'));
+    opt2 = readmatrix(strcat(path,'\materialVariables\ISO.csv'));
+    opt6 = readmatrix(strcat(path,'\materialVariables\ISO.csv'));
+    ea11 = readmatrix(strcat(path,'\materialVariables\EAISO.csv'));    
+    ea22 = readmatrix(strcat(path,'\materialVariables\EAISO.csv'));
+    ea66 = readmatrix(strcat(path,'\materialVariables\EAISO.csv'));
+    activationvolume = readmatrix( ...
+        strcat(path,'\materialVariables\240304_EyringISO2.csv'));
 end
-cte = readmatrix(strcat(path,'\CTE.csv'));
+cte = readmatrix(strcat(path,'\materialVariables\CTE.csv'));
 poisson = 0.43;
 TRef = 20 + 273.15;
 ea11 = ea11/3 + ea22/3 + ea66/3; %I average the three values
@@ -55,10 +56,11 @@ factor = 2.303*8.31446261815324;
 
 %1.
 % %%%% uniaxial constant strain rate tests data from Instron, MD, T = 313 K
-% rawData = rmmissing(readmatrix(strcat(path,'\OUTRaw_MD_CSR_01_T40.csv')));
+% rawData = rmmissing(readmatrix(strcat( ...
+%     path,'\rawData\OUTRaw_MD_CSR_01_T40.csv')));
 % tempData = rmmissing(readmatrix( ...
-%     strcat(path,'\OUTTemp_MD_CSR_01_T40.csv')));
-% % temperature vector synchronisation
+%     strcat(path,'\rawData\OUTTemp_MD_CSR_01_T40.csv')));
+% temperature vector synchronisation
 % for i = 1: size(tempData,2)-1
 %     T{i} = rmmissing(interp1(tempData(:,1)-1,tempData(:,i+1), ...
 %         rawData(:,1+15*(i-1)),'linear','extrap'))+273.15; 
@@ -97,9 +99,9 @@ factor = 2.303*8.31446261815324;
 %2.
 %%%% uniaxial relaxation tests data from Instron, MD, T = 298 K %%%%%%%%%%%
 % rawData = rmmissing(readmatrix(strcat( ...
-%     path,'\OUTRaw_MD_Rel_9MPa_T20.csv')));
+%     path,'\rawData\OUTRaw_MD_Rel_9MPa_T20.csv')));
 % tempData = rmmissing(readmatrix(strcat( ...
-%     path,'\OUTTemp_MD_Rel_9MPa_T20.csv')));
+%     path,'\rawData\OUTTemp_MD_Rel_9MPa_T20.csv')));
 % 
 % % temperature vector synchronisation
 % for i = 1: size(tempData,2)-1
@@ -150,9 +152,9 @@ factor = 2.303*8.31446261815324;
 %3.
 %%%%%%%%%%%%% uniaxial cyclic data from Instron, MD, T = 295 K %%%%%%%%%%%% 
 % rawData = rmmissing(readmatrix(strcat( ...
-%     path,'\OUTRaw_MD_CYC_CSR_01_T20.csv')));
+%     path,'\rawData\OUTRaw_MD_CYC_CSR_01_T20.csv')));
 % tempData = rmmissing(readmatrix(strcat( ...
-%     path,'\OUTTemp_MD_CYC_CSR_01_T20.csv')));
+%     path,'\rawData\OUTTemp_MD_CYC_CSR_01_T20.csv')));
 % for i = 1: size(tempData,2)-1
 %     T{i} = rmmissing(interp1(tempData(:,1)-1,tempData(:,i+1), ...
 %             rawData(:,1+8*(i-1)),'linear','extrap'))+273.15; 
@@ -184,7 +186,8 @@ factor = 2.303*8.31446261815324;
 
 %4.
 %%%%%%%%%%%%% biaxial inflation on elliptical specimen, T = 298K %%%%%%%%%% 
-% rawData = readmatrix(strcat(path,"\OUTRaw_ELLI_TD_T25_SR001.csv"));
+% rawData = readmatrix(strcat( ...
+%     path,"\rawData\OUTRaw_ELLI_TD_T25_SR001.csv"));
 % e11fit = 0:0.0001:0.015;
 % e22MAT = [];
 % s11MAT = [];
@@ -249,7 +252,8 @@ factor = 2.303*8.31446261815324;
 
 %5.
 %%%%%%%%%%%%%% creep test at 9 MPa, 273.15K %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% rawData = readmatrix(strcat(path,'\OUTRaw_MD_Creep_9MPa_T00.csv'));
+% rawData = readmatrix(strcat( ...
+%     path,'\rawData\OUTRaw_MD_Creep_9MPa_T00.csv'));
 % tlim = 1.825750000000000e+04;
 % [~,indd] = min(abs(tlim-rawData(:,1)));
 % rawData = rawData(1:indd,:);
@@ -257,18 +261,25 @@ factor = 2.303*8.31446261815324;
 
 %6.
 %%%%%%%%%%%%%% relaxation test at 6 MPa, 333.15K %%%%%%%%%%%%%%%%%%%%%%%%%%
-% rawData = readmatrix(strcat(path,'\OUTRaw_MD_Relax_6MPa_T60.csv'));
+% rawData = readmatrix(strcat( ...
+%     path,'\rawData\OUTRaw_MD_Relax_6MPa_T60.csv'));
 % tlim = 1.825750000000000e+04;
 % [~,indd] = min(abs(tlim-rawData(:,1)));
 % rawData = rawData(1:indd,:);
 
 %7.
 %%%%%%%%%%%%%% creep test at 7.5 MPa, 293.15K %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rawData1 = readmatrix(strcat(path,'\T_20_S_1200_Sample_01_CreepRecovery.csv'));
-rawData2 = readmatrix(strcat(path,'\T_20_S_1200_Sample_02_CreepRecovery.csv'));
-rawData3 = readmatrix(strcat(path,'\T_20_S_1200_Sample_03_CreepRecovery.csv'));
+rawData1 = readmatrix(strcat( ...
+    path,'\rawData\T_20_S_1200_Sample_01_CreepRecovery.csv'));
+rawData2 = readmatrix(strcat( ...
+    path,'\rawData\T_20_S_1200_Sample_02_CreepRecovery.csv'));
+rawData3 = readmatrix(strcat( ...
+    path,'\rawData\T_20_S_1200_Sample_03_CreepRecovery.csv'));
 LLL = max([size(rawData1,1),size(rawData2,1),size(rawData3,1)]);
-rawData = [[rawData1(:,1:6);nan(LLL-size(rawData1,1),6)], [rawData2(:,1:6);nan(LLL-size(rawData2,1),6)],[rawData3(:,1:6);nan(LLL-size(rawData3,1),6)]];
+rawData = [[rawData1(:,1:6);
+    nan(LLL-size(rawData1,1),6)], [rawData2(:,1:6);
+    nan(LLL-size(rawData2,1),6)],[rawData3(:,1:6);
+    nan(LLL-size(rawData3,1),6)]];
 for i = 1:length(rawData)
     for k = 1:3
         if rawData(i,2+6*(k-1))>0.1
